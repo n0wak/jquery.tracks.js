@@ -16,7 +16,7 @@
     var trackers = {              
         "ga.js" : {
             "event" : function(trackEvent) {
-                window._gaq = window._gaq || [];            
+                window._gaq = window._gaq || [];
                 window._gaq.push(['_trackEvent', trackEvent.category, trackEvent.action, trackEvent.label, trackEvent.value]);
             },
             "page" : function(trackPage) {
@@ -31,13 +31,13 @@
 
 
     var options = {
-        "event" : "click",  // on what event we want to bind the tracker. Usually on click.
-        "category" : "",    // Default name for the category. If an empty string, no tracking takes place. 
-                            // Otherwise the default is used on all elements.
-        "action" : "trigger",  // Default action. If category is set, this needs to be set as it's required by GA
-                            // see https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide
-        "label" : "",       // Optional GA tracking option
-        "value" : ""        // Optional GA tracking option
+        "event" : "click",      // on what event we want to bind the tracker. Usually on click.
+        "category" : "",        // Default name for the category. If an empty string, no tracking takes place. 
+                                // Otherwise the default is used on all elements.
+        "action" : "trigger",   // Default action. If category is set, this needs to be set as it's required by GA
+                                // see https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide
+        "label" : "",           // Optional GA tracking option
+        "value" : 0             // Optional GA tracking option
     };
 
     //
@@ -79,7 +79,7 @@
             "category" : (typeof trackObj.category === "undefined")?options.category:$.trim(trackObj.category),
             "action" : (typeof trackObj.action === "undefined")?options.action:$.trim(trackObj.action),
             "label" : (typeof trackObj.label === "undefined")?options.label:$.trim(trackObj.label),
-            "value" : (typeof trackObj.value === "undefined")?options.value:$.trim(trackObj.value),
+            "value" : Math.floor((typeof trackObj.value === "undefined")?options.value:$.trim(trackObj.value))
         };
         return (tobj.category === "")?false:tobj;
     }
@@ -174,8 +174,16 @@
     $.fn.tracks.page = function (trackPage) {     
         trackInternal('page', trackPage);  
     }        
-    $.fn.tracks.event = function (trackEvent) {                    
-        trackInternal('event', parseTrackingObject(trackEvent));  
+    $.fn.tracks.event = function (track) {
+        var trackObj = false;
+        if (track instanceof jQuery) {
+            trackObj = parseDataToTrack(track);
+        } else if (typeof track === "object") {
+            trackObj = track;
+        }
+        if (trackObj !== false) {
+            trackInternal('event', parseTrackingObject(trackObj));
+        }
     }
         
     //
