@@ -15,15 +15,15 @@
     //
     var trackers = {              
         "ga.js" : {
-            "event" : function(trackEvent) {
+            "event" : function(trackEvent, $el) {
                 window._gaq = window._gaq || [];
                 window._gaq.push(['_trackEvent', trackEvent.category, trackEvent.action, trackEvent.label, trackEvent.value]);
             },
-            "page" : function(trackPage) {
+            "page" : function(trackPage, $el) {
                 window._gaq = window._gaq || [];            
                 window._gaq.push(['_trackPageview', trackPage]);                
             },
-            "social" : function (trackSocial) {
+            "social" : function (trackSocial, $el) {
                 /* to be implemented */
             }
         }         
@@ -31,13 +31,13 @@
 
 
     var options = {
-        "event" : "click",      // on what event we want to bind the tracker. Usually on click.
-        "category" : "",        // Default name for the category. If an empty string, no tracking takes place. 
-                                // Otherwise the default is used on all elements.
-        "action" : "trigger",   // Default action. If category is set, this needs to be set as it's required by GA
-                                // see https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide
-        "label" : "",           // Optional GA tracking option
-        "value" : 0             // Optional GA tracking option
+        "event" : "click",  // on what event we want to bind the tracker. Usually on click.
+        "category" : "",    // Default name for the category. If an empty string, no tracking takes place. 
+                            // Otherwise the default is used on all elements.
+        "action" : "trigger",  // Default action. If category is set, this needs to be set as it's required by GA
+                            // see https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide
+        "label" : "",       // Optional GA tracking option
+        "value" : 0       // Optional GA tracking option
     };
 
     //
@@ -101,7 +101,7 @@
     //
     // Push tracking event to all the trackers
     //
-    function trackInternal(type, track) {
+    function trackInternal(type, track, $el) {
         // iterate through trackers
         for (var key in trackers) {
             if (trackers.hasOwnProperty(key)) { //not some other junk
@@ -113,11 +113,11 @@
                 // If the tracker is a function we assume it is only
                 // there for events so we pass along the track object
                 if (typeof fo === "function") {
-                    fo(track)
+                    fo(track, $el)
                 // If the tracker is an object and has a function with
                 // the name $type we call that 
                 } else if (typeof fo[type] === "function") {
-                    fo[type](track);
+                    fo[type](track, $el);
                 }
                 // Otherwise we don't do anything.
             }
@@ -162,7 +162,7 @@
 		return this.on(options.event, function(e) {
             var track = parseDataToTrack($(this));
             if (track !== false) {
-                trackInternal('event', track);
+                trackInternal('event', track, $(this));
             }
 		});
     };
@@ -174,7 +174,7 @@
     $.fn.tracks.page = function (trackPage) {     
         trackInternal('page', trackPage);  
     }        
-    $.fn.tracks.event = function (track) {
+    $.fn.tracks.event = function (track, $el) {
         var trackObj = false;
         if (track instanceof jQuery) {
             trackObj = parseDataToTrack(track);
@@ -182,7 +182,7 @@
             trackObj = track;
         }
         if (trackObj !== false) {
-            trackInternal('event', parseTrackingObject(trackObj));
+            trackInternal('event', parseTrackingObject(trackObj), $el);
         }
     }
         
