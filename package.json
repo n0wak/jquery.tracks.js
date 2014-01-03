@@ -1,7 +1,7 @@
 {
   "name": "jquery.tracks.js",
   "url" : "https://github.com/n0wak/tracks.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Mike Nowak",
   "description": "Simple plug and play analytics jquery plugin specifically designed for custom and multiple trackers.",
   "devDependencies": {

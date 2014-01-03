@@ -1,7 +1,7 @@
 /*!
 * jquery.tracks.js
 * @author Mike Nowak
-* @version 0.1.1
+* @version 0.1.2
 *
 * https://github.com/n0wak/tracks.js
 *
@@ -110,21 +110,23 @@
                 if (type !== "page" && type !== "social") {
                     type = "event";
                 }
+                var vars = (typeof fo["variables"] !== undefined)?fo["variables"]:false;                
+                             
                 // If the tracker is a function we assume it is only
                 // there for events so we pass along the track object
                 if (typeof fo === "function") {
-                    fo(track, $el)
+                    fo(track, $el, vars)
                 // If the tracker is an object and has a function with
                 // the name $type we call that 
                 } else if (typeof fo[type] === "function") {
-                    fo[type](track, $el);
+                    fo[type](track, $el, vars);
                 }
                 // Otherwise we don't do anything.
             }
         }
     }    
     
-    function addTracker(name, tracker) {
+    function addTracker(name, tracker, trackerVars) {
         // If one of that name exists, cancel out
         if (typeof trackers[name] !== "undefined") {
             console.log ("Tracker " + name + " exists. Can not add.");
@@ -132,7 +134,7 @@
         }
         // If it's a function add it to the tracker
         if (typeof tracker === "function") {
-            trackers[name] = tracker;
+            trackers[name] = {"event" : tracker};
         } else if (typeof tracker === "object") {
             var valid = ["event", "page", "social"]; // the only things we track
             var t = {}
@@ -142,7 +144,13 @@
                 }
             }
             trackers[name] = t;            
-        }  
+        }
+        
+        // Add tracker specific variables
+        if (typeof trackerVars === "object") {
+            trackers[name]["variables"] = trackerVars;
+        }
+        
     }
 
     
@@ -194,8 +202,8 @@
     // The tracker is an object it can contain a function for every tracking trigger you want
     // to handle. (event/page/social)    
     //
-    $.fn.tracks.addTracker = function( name, tracker ) {        
-        addTracker(name, tracker);             
+    $.fn.tracks.addTracker = function( name, tracker, trackerVars ) {        
+        addTracker(name, tracker, trackerVars);             
     };
     
 }( jQuery ));
