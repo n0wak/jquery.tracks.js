@@ -1,15 +1,15 @@
 /*!
-* tracks.js
+* jquery.tracks.js
 * @author Mike Nowak
-* @version 0.1
+* @version 0.1.1
 *
-* Copyright (c) 2013 Mike Nowak https://github.com/n0wak
-* Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
+* https://github.com/n0wak/tracks.js
+*
+* Copyright (c) Mike Nowak. Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
 *
 */
 (function( $ ) {
-    "use strict";
-    
+    "use strict";    
     //
     // Tracking controllers.
     //
