@@ -166,7 +166,7 @@
         }
         
         //
-        // the core of it
+        // do the tracking
 		return this.on(options.event, function(e) {
             var track = parseDataToTrack($(this));
             if (track !== false) {
@@ -207,4 +207,3 @@
     };
     
 }( jQuery ));
-

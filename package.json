@@ -3,7 +3,7 @@
   "url" : "https://github.com/n0wak/tracks.js",
   "version": "0.1.2",
   "author": "Mike Nowak",
-  "description": "Simple plug and play analytics jquery plugin specifically designed for custom and multiple trackers.",
+  "description": "Simple plug and play analytics jquery plugin specifically designed for multiple and custom tracking services.",
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-watch": "~0.2.0",
